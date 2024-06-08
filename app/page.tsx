@@ -4,10 +4,10 @@ import NewTodoForm from '../components/NewTodoForm';
 
 const Home: React.FC = () => {
   return (
-    <div className="min-h-screen p-4 bg-gray-100">
-      <NewTodoForm />
+    <div className="min-h-screen p-4 bg-grey-100">
       <TodoList />
-    </div>
+      <NewTodoForm />
+      </div>
   );
 };
 
