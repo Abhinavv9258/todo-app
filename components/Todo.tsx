@@ -67,7 +67,7 @@ const Todo: React.FC<TodoProps> = ({
 
     return (
         <motion.div
-            className={`p-4 rounded bg-yellow-100 bg-opacity-75 shadow-lg border-2
+            className={`p-4 rounded bg-white bg-opacity shadow-lg border-2
                 ${status === 'completed' ? 'border-green-500' : 'border-yellow-500'}  border-dashed`}
             drag
             dragElastic={1}
