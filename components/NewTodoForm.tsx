@@ -13,7 +13,7 @@ const NewTodoForm: React.FC = () => {
         const position = {
             x: getRandomPosition(100),
             y: getRandomPosition(100),
-            z: Date.now(),
+            z: getRandomPosition(100),
         };
 
         const response = await fetch("/api/todo", {
@@ -31,6 +31,7 @@ const NewTodoForm: React.FC = () => {
         if (response.ok) {
             const newTodo = await response.json();
             setDescription("");
+            window.location.reload();
         } else {
             console.error("Failed to create todo:", await response.text());
         }

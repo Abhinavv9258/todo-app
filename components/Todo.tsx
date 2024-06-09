@@ -1,6 +1,4 @@
-"use client";
-
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, PanInfo, useMotionValue } from 'framer-motion';
 import { format } from 'date-fns-tz';
 
@@ -27,6 +25,7 @@ const Todo: React.FC<TodoProps> = ({
     onToggleStatus,
     onDeleteTodo,
 }) => {
+    const [isDragging, setIsDragging] = useState(false);
 
     const updatedAtIST = format(new Date(updatedAt), 'yyyy-MM-dd hh:mm a', { timeZone: 'Asia/Kolkata' });
     const descriptionLength = description.length;
@@ -54,11 +53,16 @@ const Todo: React.FC<TodoProps> = ({
         onToggleStatus(id);
     };
 
+    const handleDragStart = () => {
+        setIsDragging(true);
+    };
+
     const handleDragEnd = (event: MouseEvent | TouchEvent, info: PanInfo) => {
+        setIsDragging(false);
         x.set(info.point.x);
         y.set(info.point.y);
-        z.set(Date.now());
-        onUpdatePosition(id, info.point.x, info.point.y, Date.now());
+        z.set(position.z);
+        onUpdatePosition(id, info.point.x, info.point.y, position.z);
     };
 
     return (
@@ -69,13 +73,14 @@ const Todo: React.FC<TodoProps> = ({
             dragElastic={1}
             dragConstraints={dragConstraints}
             dragMomentum={false}
+            onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
             style={{
-                zIndex: position.z,
+                zIndex: !isDragging ? 9999 : position.z,
                 width: `${width}px`,
                 position: 'absolute',
-                x:position.x,
-                y:position.y,
+                x: position.x,
+                y: position.y,
             }}
         >
             <div className="flex justify-between items-center">
