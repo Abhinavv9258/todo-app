@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion, PanInfo, useMotionValue } from 'framer-motion';
+import React, { useState, useRef } from 'react';
+import { motion, useMotionValue } from 'framer-motion';
 import { format } from 'date-fns-tz';
 
 type TodoProps = {
@@ -25,9 +25,9 @@ const Todo: React.FC<TodoProps> = ({
     onToggleStatus,
     onDeleteTodo,
 }) => {
-    const [isDragging, setIsDragging] = useState(false);
+    const todoRef = useRef<HTMLDivElement>(null);
 
-    const updatedAtIST = format(new Date(updatedAt), 'yyyy-MM-dd hh:mm a', { timeZone: 'Asia/Kolkata' });
+    const updatedAtIST = format(new Date(updatedAt), 'yyyy-MM-dd hh:mm:ss a', { timeZone: 'Asia/Kolkata' });
     const descriptionLength = description.length;
     const descriptionWidth = descriptionLength * 10;
     const timeLength = updatedAt.length;
@@ -53,30 +53,32 @@ const Todo: React.FC<TodoProps> = ({
         onToggleStatus(id);
     };
 
-    const handleDragStart = () => {
-        setIsDragging(true);
-    };
 
-    const handleDragEnd = (event: MouseEvent | TouchEvent, info: PanInfo) => {
-        setIsDragging(false);
-        x.set(info.point.x);
-        y.set(info.point.y);
-        z.set(isDragging ? Date.now() + 9999 : position.z);
-        onUpdatePosition(id, info.point.x, info.point.y, isDragging ? Date.now() + 9999 : position.z);
+    const handleDragEnd = () => {
+        if (todoRef.current) {
+            const boundingRect = todoRef.current.getBoundingClientRect();
+            const newX = boundingRect.x;
+            const newY = boundingRect.y;
+            const newZ = 10;
+            x.set(newX);
+            y.set(newY);
+            z.set(newZ);
+            onUpdatePosition(id, newX, newY, newZ);
+        }
     };
 
     return (
         <motion.div
+            ref={todoRef}
             className={`p-4 rounded bg-white bg-opacity shadow-lg border-2
-                ${status === 'completed' ? 'border-green-500' : 'border-yellow-500'}  border-dashed`}
+                ${status === 'completed' ? 'border-green-500' : 'border-yellow-500'} border-dashed`}
             drag
             dragElastic={1}
             dragConstraints={dragConstraints}
             dragMomentum={false}
-            onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
             style={{
-                zIndex: isDragging ? Date.now() + 9999 : position.z,
+                zIndex: z,
                 width: `${width}px`,
                 position: 'absolute',
                 x: position.x,

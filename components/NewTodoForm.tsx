@@ -13,7 +13,7 @@ const NewTodoForm: React.FC<NewTodoFormProps> = ({ setTodo }) => {
         const position = {
             x: getRandomPosition(100),
             y: getRandomPosition(100),
-            z: getRandomPosition(100),
+            z: 10,
         };
 
         const response = await fetch("/api/todo", {

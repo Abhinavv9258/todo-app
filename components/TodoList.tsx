@@ -54,14 +54,14 @@ const TodoList: React.FC<TodoProps> = ({ todo, setTodo }) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id, status: todo.find(item => item.id === id)?.status === 'completed' ? 'pending' : 'completed' }),
+                body: JSON.stringify({ id, status: todo.find(item => item.id === id)?.status === 'completed' ? 'pending' : 'completed', updatedAt: new Date().toISOString() }),
             });
 
             if (response.ok) {
                 setTodo((prevTodo) =>
                     prevTodo.map((todo) =>
                         todo.id === id
-                            ? { ...todo, status: todo.status === 'completed' ? 'pending' : 'completed' }
+                            ? { ...todo, status: todo.status === 'completed' ? 'pending' : 'completed', updatedAt: new Date().toISOString() }
                             : todo
                     )
                 );

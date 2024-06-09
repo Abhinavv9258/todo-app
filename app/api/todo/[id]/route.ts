@@ -46,9 +46,8 @@ export async function PUT(req: NextRequest) {
 export async function PATCH(req: NextRequest, res: NextResponse) {
     try {
         const body = await req.json();
-        const { id, status } = body;
-        const updatedAt = new Date().toISOString();
-
+        const { id, status, updatedAt } = body;
+        
         const updatedTodo = await prisma.todo.update({
             where: { id: Number(id) },
             data: { status, updatedAt },
