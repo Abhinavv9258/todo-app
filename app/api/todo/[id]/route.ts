@@ -47,7 +47,6 @@ export async function PATCH(req: NextRequest, res: NextResponse) {
     const body = await req.json();
     const { id, status } = body;
     const updatedAt = new Date().toISOString();
-    console.log("status: " + status)
 
     const updatedTodo = await prisma.todo.update({
       where: { id: Number(id) },

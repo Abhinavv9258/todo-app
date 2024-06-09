@@ -2,7 +2,7 @@
 
 import React, { useState, FormEvent } from "react";
 
-const NewTodoForm: React.FC = () => {
+const NewTodoForm: React.FC<NewTodoFormProps> = ({ setTodo }) => {
     const [description, setDescription] = useState("");
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -31,7 +31,7 @@ const NewTodoForm: React.FC = () => {
         if (response.ok) {
             const newTodo = await response.json();
             setDescription("");
-            window.location.reload();
+            setTodo((prevTodo) => [...prevTodo, { ...newTodo.newTodo }]);
         } else {
             console.error("Failed to create todo:", await response.text());
         }

@@ -3,17 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Todo from './Todo';
 
-export type TodoItem = {
-    id: number;
-    title: string;
-    description: string;
-    updatedAt: string;
-    position: { x: number, y: number, z: number };
-    status: string;
-};
-
-const TodoList: React.FC = () => {
-    const [todo, setTodo] = useState<TodoItem[]>([]);
+const TodoList: React.FC<TodoProps> = ({ todo, setTodo }) => {
 
     const fetchTodo = async () => {
         try {
@@ -34,7 +24,7 @@ const TodoList: React.FC = () => {
     }, []);
 
     const updateTodoPosition = async (id: number, x: number, y: number, z: number) => {
-        try{
+        try {
             const response = await fetch(`/api/todo/${id}`, {
                 method: 'PUT',
                 headers: {
@@ -64,7 +54,7 @@ const TodoList: React.FC = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id, status: todo.find(item => item.id === id)?.status === 'completed' ? 'pending' : 'completed'  }), 
+                body: JSON.stringify({ id, status: todo.find(item => item.id === id)?.status === 'completed' ? 'pending' : 'completed' }),
             });
 
             if (response.ok) {
