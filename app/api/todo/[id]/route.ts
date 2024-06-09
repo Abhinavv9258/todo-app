@@ -1,61 +1,62 @@
 import prisma from '../../../../lib/prisma';
 import { NextResponse, NextRequest } from 'next/server';
-import { NextApiRequest, NextApiResponse } from 'next';
+
 
 export async function DELETE(req: NextRequest) {
-  try {
-    const body = await req.json();
-    const { id } = body;
+    try {
+        const body = await req.json();
+        const { id } = body;
 
-    await prisma.todo.delete({
-      where: { id: Number(id) },
-    });
-    return NextResponse.json({}, { status: 200 });
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json(
-      {
-        error: "Internal Server Error",
-      },
-      { status: 500 }
-    );
-  }
+        await prisma.todo.delete({
+            where: { id: Number(id) },
+        });
+        return NextResponse.json({}, { status: 200 });
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json(
+            {
+                error: "Internal Server Error",
+            },
+            { status: 500 }
+        );
+    }
 }
 
-export async function PUT(req:NextRequest) {
+
+export async function PUT(req: NextRequest) {
     try {
-      const body = await req.json();
-      const { id } = body;
-      const { x, y, z } = body.position;
-      const updatedAt = new Date().toISOString();
+        const body = await req.json();
+        const { id } = body;
+        const { x, y, z } = body.position;
+        const updatedAt = new Date().toISOString();
 
-      const updatedTodo = await prisma.todo.update({
-        where: { id: Number(id) },
-        data: { position: { x, y, z }, updatedAt },
-      });
+        const updatedTodo = await prisma.todo.update({
+            where: { id: Number(id) },
+            data: { position: { x, y, z }, updatedAt },
+        });
 
-      return NextResponse.json({ updatedTodo }, { status: 200 });
+        return NextResponse.json({ updatedTodo }, { status: 200 });
     } catch (error) {
-      console.error(error);
-      return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+        console.error(error);
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }
 
 
 export async function PATCH(req: NextRequest, res: NextResponse) {
-  try {
-    const body = await req.json();
-    const { id, status } = body;
-    const updatedAt = new Date().toISOString();
+    try {
+        const body = await req.json();
+        const { id, status } = body;
+        const updatedAt = new Date().toISOString();
 
-    const updatedTodo = await prisma.todo.update({
-      where: { id: Number(id) },
-      data: { status, updatedAt },
-    });
+        const updatedTodo = await prisma.todo.update({
+            where: { id: Number(id) },
+            data: { status, updatedAt },
+        });
 
-    return NextResponse.json({ updatedTodo }, { status: 200 });
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-  }
+        return NextResponse.json({ updatedTodo }, { status: 200 });
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
 }
