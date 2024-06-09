@@ -61,8 +61,8 @@ const Todo: React.FC<TodoProps> = ({
         setIsDragging(false);
         x.set(info.point.x);
         y.set(info.point.y);
-        z.set(position.z);
-        onUpdatePosition(id, info.point.x, info.point.y, position.z);
+        z.set(isDragging ? Date.now() + 9999 : position.z);
+        onUpdatePosition(id, info.point.x, info.point.y, isDragging ? Date.now() + 9999 : position.z);
     };
 
     return (
@@ -76,7 +76,7 @@ const Todo: React.FC<TodoProps> = ({
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
             style={{
-                zIndex: !isDragging ? 9999 : position.z,
+                zIndex: isDragging ? Date.now() + 9999 : position.z,
                 width: `${width}px`,
                 position: 'absolute',
                 x: position.x,
